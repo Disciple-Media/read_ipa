@@ -40,15 +40,6 @@ class IpaFileTest < Minitest::Test
     assert_equal("com.dcrails.multig", @ipa_file.bundle_identifier)
   end
 
-  def test_icon_prerendered
-    assert_equal(false, @ipa_file.icon_prerendered)
-  end
-
-  def test_icon
-    assert_equal("3e4ed7f5a30280009fac972f8d4c90d2a91f46b94e7d687a20b8bfedad5ab62a",
-                 Digest::SHA256::hexdigest(@ipa_file.icon_file))
-  end
-
   def test_executable_file_name
     assert_equal("MultiG", @ipa_file.executable_file_name)
   end

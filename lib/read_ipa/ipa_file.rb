@@ -1,7 +1,5 @@
 require 'zip'
 require 'read_ipa/plist_binary'
-require 'apple_png'
-require 'chunky_png'
 require 'cfpropertylist'
 
 module ReadIpa
@@ -40,31 +38,6 @@ module ReadIpa
 
     def url_schemes
       @info_plist.url_schemes
-    end
-
-    def read_png(data)
-      begin
-        return ApplePng.new(data)
-      rescue NotValidApplePngError
-        return ChunkyPng::Image.from_datastream(ChunkyPNG::Datastream.from_blob(data))
-      end
-    end
-
-    def get_highest_res_icon(icons_file_names)
-      icon_names = icons_file_names
-        .map{ |icon_path| find_existing_path(icon_path) }
-        .compact
-        .uniq(&:name)
-      highest_res_icon = icon_names
-        .map{|entry| entry.get_input_stream.read}
-        .max_by{|data| read_png(data).width }
-
-      return nil if highest_res_icon.nil?
-      begin
-        return ApplePng.new(highest_res_icon).data
-      rescue NotValidApplePngError
-        highest_res_icon
-      end
     end
 
     def icon_file
